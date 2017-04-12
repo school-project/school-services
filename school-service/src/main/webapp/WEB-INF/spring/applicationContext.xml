@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- Enables automatic mapping of fund objects to and from JSON -->
+    <mvc:annotation-driven />
+
+    <context:component-scan base-package="com.school" />
+
+    <context:annotation-config/>
+
+    <import resource="classpath:db-persistance.xml"/>
+
+<!--	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="false"/>
+        <property name="ignoreUnresolvablePlaceholders" value="false"/>
+    	<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+       <property name="properties" ref="configurationPropertyBean"/>
+    </bean>-->
+
+    <!-- Converts JSON to POJO and vice versa -->
+    <bean id="jsonMessageConverter"
+          class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="messageConverters">
+            <util:list id="beanList">
+                <ref bean="jsonMessageConverter" />
+            </util:list>
+        </property>
+    </bean>
+ 
+    <bean class="org.springframework.web.client.RestTemplate" />
+    
+</beans>

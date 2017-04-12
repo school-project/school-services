@@ -1,0 +1,5 @@
+school-service/target/
+*.jar
+*.class
+*.iml
+common-database-service/target/

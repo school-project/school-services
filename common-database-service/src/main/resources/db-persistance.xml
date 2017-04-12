@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:component-scan base-package="com.school.db"/>
+
+    <jee:jndi-lookup id="schoolDS" jndi-name="java:comp/env/jdbc/schoolDS"/>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+        <property name="dataSource" ref="schoolDS"/>
+        <property name="packagesToScan" value="com.school.db"/>
+        <property name="hibernateProperties" ref="hibernateProperties"/>
+    </bean>
+
+    <util:properties id="hibernateProperties">
+
+<!--        <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>-->
+        <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+        <prop key="hibernate.validator.apply_to_ddl">false</prop>
+        <prop key="hibernate.validator.autoregister_listeners">false</prop>
+        <prop key="hibernate.show_sql">false</prop>
+        <prop key="hibernate.format_sql">true</prop>
+<!--        <prop key="hibernate.default_schema">NCS</prop>-->
+    </util:properties>
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <beans profile="dev-h2">
+        <jdbc:embedded-database id="schoolDS" type="H2">
+            <jdbc:script location="classpath:db/schema.sql"/>
+        </jdbc:embedded-database>
+
+        <util:properties id="hibernateProperties">
+            <prop key="hibernate.show_sql">true</prop>
+            <prop key="hibernate.hbm2ddl.auto">create</prop>
+            <prop key="hibernate.hbm2ddl.import_files">/db/init-data.sql</prop>
+            <prop key="hibernate.cache.use_second_level_cache">false</prop>
+        </util:properties>
+    </beans>
+
+</beans>
