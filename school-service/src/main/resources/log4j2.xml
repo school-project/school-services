@@ -45,5 +45,4 @@
             <appender-ref ref="applogFile"/>
         </root>
     </loggers>
-
 </configuration>
