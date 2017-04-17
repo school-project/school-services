@@ -28,7 +28,7 @@ public class FacilityController
 	@Autowired
 	FacilityService facilityService;
 
-	@RequestMapping(value = "/saveFacility", method = RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value = "/createFacility", method = RequestMethod.POST, produces = "application/json")
 	@ResponseBody
 	public ResponseEntity saveFacility(@RequestBody Facility facility)
 	{
@@ -38,7 +38,7 @@ public class FacilityController
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/deleteFacility/{id}", method = RequestMethod.DELETE, produces = "application/json")
+	@RequestMapping(value = "/removeFacility/{id}", method = RequestMethod.DELETE, produces = "application/json")
 	@ResponseBody
 	public ResponseEntity deleteFacility(@PathVariable long id)
 	{

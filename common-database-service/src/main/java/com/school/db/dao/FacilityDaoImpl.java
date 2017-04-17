@@ -23,9 +23,9 @@ public class FacilityDaoImpl extends AbstractHibernateDao implements FacilityDao
 	public long save(Facility facility)
 	{
 		LOGGER.debug("saving facility to DB");
-
 		Long id = (Long) getSession().save(facility);
 		LOGGER.debug("facility is saved to DB with id=" + id);
+
 		return id;
 	}
 
@@ -33,10 +33,11 @@ public class FacilityDaoImpl extends AbstractHibernateDao implements FacilityDao
 	{
 		LOGGER.debug("deleting facility from DB");
 		String query = "delete from Facility f where f.id=:id";
-		int result = getSession().createQuery(query)
+		int records = getSession().createQuery(query)
 				.setParameter("id", id).executeUpdate();
-		LOGGER.debug(result + " record(s) deleted from DB.");
-		return result;
+		LOGGER.debug(records + " record(s) deleted from DB.");
+
+		return records;
 	}
 
 	public List<Facility> getVisibleFacility()
